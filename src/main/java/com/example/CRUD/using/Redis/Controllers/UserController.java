@@ -41,7 +41,11 @@ public class UserController {
     public ResponseEntity<List<GetAllUsersResponseDTO>> getAllUsers() {
         List <User> users = userService.getAllUsers();
         List<GetAllUsersResponseDTO> response = new ArrayList<>();
-        users.forEach(user -> response.add(mapper.map(user, GetAllUsersResponseDTO.class)));
+
+        if(users.size() == 0)
+            return ResponseEntity.noContent().build();
+        else
+            users.stream().filter(x -> x != null).forEach(user -> response.add(mapper.map(user, GetAllUsersResponseDTO.class)));
         return ResponseEntity.ok(response);
     }
 
